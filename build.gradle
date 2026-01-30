@@ -41,11 +41,12 @@ setDefaultProperty 'extra_jvm_args', false, ''
 setDefaultProperty 'extra_tweak_classes', false, ''
 setDefaultProperty 'change_minecraft_sources', false, false
 
-version = propertyString('mod_version')
 group = propertyString('root_package')
+version = propertyString('mod_version')
 
+// Configure archives name via the base plugin for Gradle 9+
 base {
-    archivesName.set(propertyString('mod_id'))
+    archivesName = propertyString('mod_id')
 }
 
 tasks.decompressDecompiledSources.enabled !propertyBool('change_minecraft_sources')
@@ -53,8 +54,7 @@ tasks.decompressDecompiledSources.enabled !propertyBool('change_minecraft_source
 java {
     toolchain {
         languageVersion.set(JavaLanguageVersion.of(propertyBool('use_modern_java_syntax') ? 16 : 8))
-        // Azul covers the most platforms for Java 8 toolchains, crucially including MacOS arm64
-        vendor.set(JvmVendorSpec.AZUL)
+        // Removed vendor constraint to allow default toolchain provisioning
     }
     if (propertyBool('generate_sources_jar')) {
         withSourcesJar()
